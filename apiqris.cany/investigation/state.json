@@ -1,0 +1,63 @@
+{
+  "revision": 8,
+  "brief": {
+    "question": "How is https://apiqris.com/ structured and built, and how can it be recreated faithfully in this repository?",
+    "purpose": "Recreate the apiqris.com website faithfully, including its pages, layout, styling, and interactive elements.",
+    "targets": [
+      "https://apiqris.com/"
+    ],
+    "constraints": [
+      "Clean-room recreation without proprietary backend secrets; observe public web assets and structure"
+    ],
+    "done_when": "The website structure, styling, assets, components, and pages are recreated in this repository and can be run and previewed."
+  },
+  "plan": [
+    {
+      "title": "Study and extract target website assets, styling, and DOM structure",
+      "status": "done",
+      "why": "Extracted target HTML, assets (favicons, manifests, SVGs), styles, and validated pure-CSS tab behavior."
+    },
+    {
+      "title": "Analyze site architecture, routes, and frameworks",
+      "status": "done",
+      "why": "Structured repository to host all 46 routes faithfully with clean preview server and static export."
+    },
+    {
+      "title": "Recreate website pages, components, and responsive design",
+      "status": "done",
+      "why": "All 46 pages reconstructed, CSS scoped styles maintained, obfuscated emails decoded to halo@apiqris.com."
+    },
+    {
+      "title": "Verify build and preview locally",
+      "status": "done",
+      "why": "Verified all assets, HTML integrity, package.json scripts, and local server compatibility."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "hyp_1",
+      "claim": "apiqris.com is a statically generated website (built with Astro) containing 46 pages with inlined CSS, pure CSS radio tabs for code snippets, and self-contained vector SVGs/assets.",
+      "prediction": "All 46 routes and assets can be extracted, verified, and served completely static with 100% fidelity.",
+      "status": "supported",
+      "supporting": [
+        "ev_858b96ed4ba4f664f0144d04a844671f922f152ce39aed5cb58fac0f45010889"
+      ],
+      "contradicting": [],
+      "notes": [
+        "Confirmed by analyzing DOM tree, HTTP headers, inlined styles, and zero external JS dependency."
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "fnd_1",
+      "statement": "The website https://apiqris.com is a high-performance static HTML site built with Astro, utilizing inlined CSS stylesheets, zero client-side JavaScript dependencies, and pure CSS radio inputs for interactive code example tabs.",
+      "evidence_ids": [
+        "ev_858b96ed4ba4f664f0144d04a844671f922f152ce39aed5cb58fac0f45010889"
+      ],
+      "confidence": "observed"
+    }
+  ],
+  "handoff": "All 46 pages and static assets of https://apiqris.com have been successfully reconstructed in this repository (/home/antigravity/xoxoyansa-gif/apiqris). The site uses pure-CSS interactive tabs without requiring any external JavaScript runtime. Cloudflare email obfuscation was converted to clean mailto:halo@apiqris.com links. A package.json with dev/start scripts and preview options is in place. Next steps: commit changes to git, configure deployment if desired (e.g. GitHub Pages or Vercel), or customize content as needed.",
+  "updated": "2026-11-09T19:58:48Z"
+}
