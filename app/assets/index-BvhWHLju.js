@@ -63,6 +63,7 @@ async function mockApi(path, options) {
   options = options || {};
   var user = null;
   try { user = JSON.parse(localStorage.getItem('apiqris_user')); } catch(e){}
+  
   var invoices = [];
   try { invoices = JSON.parse(localStorage.getItem('apiqris_invoices') || '[]'); } catch(e){}
   if (!invoices || !invoices.length) {
@@ -72,6 +73,36 @@ async function mockApi(path, options) {
       { id: "INV-1026", order_id: "ORD-9903", amount: 75000, total_amount: 75089, status: "pending", customer_name: "Ahmad Dani", customer_phone: "087812345678", created_at: new Date().toISOString(), source: "dashboard", description: "Pesanan Produk #4" }
     ];
     try { localStorage.setItem('apiqris_invoices', JSON.stringify(invoices)); } catch(e){}
+  }
+
+  var devices = [];
+  try { devices = JSON.parse(localStorage.getItem('apiqris_devices') || '[]'); } catch(e){}
+  if (!devices || !devices.length) {
+    devices = [
+      {
+        id: 1,
+        name: "HP Kasir Samsung (Demo)",
+        status: "online",
+        model: "Samsung Galaxy A54",
+        android_version: "14",
+        battery: 88,
+        charging: true,
+        net: "WiFi",
+        listener_enabled: true,
+        bg_restricted: false,
+        battery_whitelisted: true,
+        standby_bucket: 10,
+        lock_secure: false,
+        last_seen_at: new Date().toISOString(),
+        app_version: "1.2.4",
+        rules_count: 5,
+        installed_apps: "BCA mobile, BRImo, GoPay Merchant, DANA Bisnis",
+        money_packages: "BCA mobile (Rp50.125)",
+        pairing_code: "849201",
+        pairing_expires_at: new Date(Date.now() + 86400000).toISOString()
+      }
+    ];
+    try { localStorage.setItem('apiqris_devices', JSON.stringify(devices)); } catch(e){}
   }
 
   var cleanPath = (path || '').split('?')[0];
@@ -127,11 +158,183 @@ async function mockApi(path, options) {
   if (cleanPath === '/api/setup') {
     return { complete: true, mode: "live", step: "done", qris_uploaded: true, webhook_configured: true };
   }
+  if (cleanPath === '/api/dashboard') {
+    return {
+      stats: {
+        qris_active: 1,
+        devices_online: devices.filter(function(d){ return d.status === 'online'; }).length,
+        devices_total: devices.length,
+        api_keys: 1,
+        month_count: invoices.length,
+        month_sum: invoices.reduce(function(a, b){ return a + (b.amount || 0); }, 0),
+        today_sum: 50000,
+        today_count: 1
+      },
+      series: [
+        { label: "Senin", count: 2, amount: 175000 },
+        { label: "Selasa", count: 1, amount: 75000 },
+        { label: "Rabu", count: 3, amount: 250000 },
+        { label: "Kamis", count: 2, amount: 150000 },
+        { label: "Jumat", count: 4, amount: 320000 },
+        { label: "Sabtu", count: 5, amount: 480000 },
+        { label: "Minggu", count: 3, amount: 220000 }
+      ]
+    };
+  }
+  if (cleanPath === '/api/reports') {
+    var totalAmt = invoices.filter(function(x){ return x.status === 'paid'; }).reduce(function(a, b){ return a + (b.amount || 0); }, 0);
+    return {
+      totals: { count: invoices.length, amount: totalAmt, paid_rate: 100 },
+      by_day: [
+        { date: new Date().toISOString().slice(0, 10), amount: totalAmt, count: invoices.length }
+      ],
+      by_hour: [
+        { label: "10", count: 1, amount: 50000 },
+        { label: "14", count: 1, amount: 125000 },
+        { label: "19", count: 1, amount: 75000 }
+      ],
+      by_source: [
+        { source: "dashboard", amount: totalAmt, count: invoices.length }
+      ],
+      from: new Date(Date.now() - 30 * 86400000).toISOString(),
+      to: new Date().toISOString()
+    };
+  }
   if (cleanPath === '/api/merchants') {
-    return [{ id: 1, name: (user ? user.business_name : "Toko Utama"), is_default: true }];
+    return [
+      {
+        id: 1,
+        name: (user ? user.business_name : "Toko Utama"),
+        status: "active",
+        paid_sum_30: 250000,
+        paid_today: 50000,
+        is_default: true,
+        api_key: (user && user.api_key) || "aq_live_demo1234567890abcdef"
+      }
+    ];
   }
   if (cleanPath === '/api/qris-accounts') {
-    return [{ id: 1, name: "QRIS Dinamis Toko", is_active: true, qris_string: "00020101021226...5802ID5914Toko Demo6007JAKARTA6304ABCD" }];
+    return [
+      {
+        id: 1,
+        label: "QRIS Dinamis Toko",
+        name: "QRIS Dinamis Toko",
+        is_active: true,
+        is_default: true,
+        qris_string: "00020101021226...5802ID5914Toko Demo6007JAKARTA6304ABCD",
+        created_at: new Date().toISOString()
+      }
+    ];
+  }
+  if (cleanPath.indexOf('/api/qris-accounts/') === 0) {
+    return { success: true };
+  }
+  if (cleanPath === '/api/devices') {
+    if (options.method === 'POST') {
+      var newDev = {
+        id: Date.now(),
+        name: body.name || ("HP Pendamping " + (devices.length + 1)),
+        status: "unpaired",
+        model: "Android Phone",
+        android_version: "14",
+        battery: 100,
+        charging: true,
+        net: "WiFi",
+        listener_enabled: true,
+        bg_restricted: false,
+        battery_whitelisted: true,
+        standby_bucket: 10,
+        lock_secure: false,
+        last_seen_at: new Date().toISOString(),
+        app_version: "1.2.4",
+        rules_count: 3,
+        installed_apps: "BCA mobile, GoPay",
+        pairing_code: String(Math.floor(100000 + Math.random() * 900000)),
+        pairing_expires_at: new Date(Date.now() + 15 * 60000).toISOString(),
+        created_at: new Date().toISOString()
+      };
+      devices.push(newDev);
+      try { localStorage.setItem('apiqris_devices', JSON.stringify(devices)); } catch(e){}
+      return {
+        device: newDev,
+        pairing_qr: {
+          code: newDev.pairing_code,
+          name: newDev.name,
+          api_url: window.location.origin + "/apiqris/app",
+          token: "pair_" + Math.random().toString(36).substring(2, 10)
+        }
+      };
+    }
+    return devices;
+  }
+  if (cleanPath.indexOf('/api/devices/') === 0) {
+    var parts = cleanPath.split('/');
+    var devId = parts[3];
+    var devIdx = devices.findIndex(function(d){ return String(d.id) === String(devId); });
+    var targetDev = devIdx >= 0 ? devices[devIdx] : devices[0];
+
+    if (options.method === 'DELETE') {
+      if (devIdx >= 0) {
+        devices.splice(devIdx, 1);
+        try { localStorage.setItem('apiqris_devices', JSON.stringify(devices)); } catch(e){}
+      }
+      return { success: true };
+    }
+    if (parts[4] === 'pairing' && options.method === 'POST') {
+      if (targetDev) {
+        targetDev.status = "unpaired";
+        targetDev.pairing_code = String(Math.floor(100000 + Math.random() * 900000));
+        targetDev.pairing_expires_at = new Date(Date.now() + 15 * 60000).toISOString();
+        try { localStorage.setItem('apiqris_devices', JSON.stringify(devices)); } catch(e){}
+      }
+      return {
+        device: targetDev,
+        pairing_qr: {
+          code: targetDev ? targetDev.pairing_code : "849201",
+          name: targetDev ? targetDev.name : "HP Pendamping",
+          api_url: window.location.origin + "/apiqris/app",
+          token: "pair_" + Math.random().toString(36).substring(2, 10)
+        }
+      };
+    }
+    return { device: targetDev };
+  }
+  if (cleanPath === '/api/notifications') {
+    var notifs = [
+      {
+        id: 1,
+        posted_at: new Date(Date.now() - 1800000).toISOString(),
+        device_name: "HP Kasir Samsung (Demo)",
+        app_label: "BCA mobile",
+        package_name: "com.bca",
+        sender: "BCA",
+        title: "Dana Masuk",
+        body: "Transfer Rp50.125 dari BUDI SANTOSO berhasil masuk.",
+        amount: 50125,
+        status: "matched",
+        invoice_ref: "INV-1024"
+      },
+      {
+        id: 2,
+        posted_at: new Date(Date.now() - 5400000).toISOString(),
+        device_name: "HP Kasir Samsung (Demo)",
+        app_label: "GoPay Merchant",
+        package_name: "com.gojek.merchant",
+        sender: "GoPay",
+        title: "Pembayaran Diterima",
+        body: "Pembayaran QRIS Rp125.210 dari Siti Rahma diterima.",
+        amount: 125210,
+        status: "matched",
+        invoice_ref: "INV-1025"
+      }
+    ];
+    return {
+      total: notifs.length,
+      items: notifs
+    };
+  }
+  if (cleanPath.indexOf('/api/notifications/') === 0) {
+    return { success: true };
   }
   if (cleanPath === '/api/invoices') {
     if (options.method === 'POST') {
@@ -172,10 +375,35 @@ async function mockApi(path, options) {
     return { plan: "free", fee_rate: 0, monthly_fee: 0 };
   }
   if (cleanPath === '/api/ledger') {
+    var paidInvoices = invoices.filter(function(x){ return x.status === 'paid'; });
     return {
-      balance: invoices.filter(function(x){ return x.status === 'paid'; }).reduce(function(a, b){ return a + (b.amount || 0); }, 0),
-      items: invoices.filter(function(x){ return x.status === 'paid'; })
+      balance: 100000,
+      items: paidInvoices,
+      topup: { min_amount: 10000, max_amount: 10000000 },
+      topups: []
     };
+  }
+  if (cleanPath === '/api/topup') {
+    return {
+      id: "TP-" + Date.now(),
+      amount: Number(body.amount) || 50000,
+      status: "pending",
+      qr_image: "/apiqris/icon-512.png",
+      expires_at: new Date(Date.now() + 3600000).toISOString()
+    };
+  }
+  if (cleanPath.indexOf('/api/topup/') === 0) {
+    return {
+      topup: {
+        id: "TP-1",
+        amount: 50000,
+        status: "paid",
+        expires_at: new Date().toISOString()
+      }
+    };
+  }
+  if (cleanPath === '/api/tickets') {
+    return [];
   }
   if (cleanPath.indexOf('/api/account') === 0) {
     return {
