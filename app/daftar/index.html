@@ -2,13 +2,14 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
-    <link rel="icon" type="image/png" href="../favicon.png" />
+    <base href="/apiqris/app/" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" href="favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#e11d2e" />
     <title>Daftar Akun - APIQris</title>
-    <script type="module" crossorigin src="../assets/index-BvhWHLju.js"></script>
-    <link rel="stylesheet" crossorigin href="../assets/index-BaUO8mDC.css">
+    <script type="module" crossorigin src="assets/index-BvhWHLju.js"></script>
+    <link rel="stylesheet" crossorigin href="assets/index-BaUO8mDC.css">
   </head>
   <body>
     <div id="root"></div>
@@ -32,7 +33,7 @@
           api_key: 'aq_live_demo1234567890abcdef',
           created_at: new Date().toISOString()
         }));
-        window.location.href = window.location.pathname.includes('/apiqris') ? '/apiqris/app/' : '/app/';
+        window.location.href = '/apiqris/app/';
       }
     </script>
   </body>
