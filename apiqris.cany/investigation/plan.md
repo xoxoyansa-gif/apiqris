@@ -1,6 +1,6 @@
 # Plan
 
-1. [done] Study and extract target website assets, styling, and DOM structure — Extracted target HTML, assets (favicons, manifests, SVGs), styles, and validated pure-CSS tab behavior.
-2. [done] Analyze site architecture, routes, and frameworks — Structured repository to host all 46 routes faithfully with clean preview server and static export.
-3. [done] Recreate website pages, components, and responsive design — All 46 pages reconstructed, CSS scoped styles maintained, obfuscated emails decoded to halo@apiqris.com.
-4. [done] Verify build and preview locally — Verified all assets, HTML integrity, package.json scripts, and local server compatibility.
+1. [done] Analyze app.apiqris.com web application bundles and routing — Extracted router definitions, authentication state, and backend API endpoints.
+2. [done] Extract and recreate app assets, styles, and SPA entrypoint — Downloaded all app JavaScript chunks, stylesheets, and icons to /app/.
+3. [done] Integrate /daftar, /masuk, and app routes into the repository — Patched client-side router basename and API base URL; created static entrypoints for /app/daftar/ and /app/masuk/.
+4. [done] Deploy and test end-to-end routing on GitHub Pages — Updated landing page CTA buttons to link directly to internal app routes.

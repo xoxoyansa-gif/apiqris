@@ -1,13 +1,13 @@
 # Brief
 
-**Question:** How is https://apiqris.com/ structured and built, and how can it be recreated faithfully in this repository?
+**Question:** How is https://app.apiqris.com built and structured, and how can its dashboard, register (/daftar), and login (/masuk) web application be recreated faithfully?
 
-**Purpose:** Recreate the apiqris.com website faithfully, including its pages, layout, styling, and interactive elements.
+**Purpose:** Recreate the app.apiqris.com merchant dashboard & authentication portal and integrate it into the repository.
 
 **Targets:**
-- https://apiqris.com/
+- https://app.apiqris.com/
 
 **Constraints:**
-- Clean-room recreation without proprietary backend secrets; observe public web assets and structure
+- Clean room investigation of public client-side web bundle, static assets, and mockable API structure
 
-**Done when:** The website structure, styling, assets, components, and pages are recreated in this repository and can be run and previewed.
+**Done when:** The app interface, routes (/daftar, /masuk, /dashboard, etc.), CSS, assets, and state handling are reconstructed and integrated.

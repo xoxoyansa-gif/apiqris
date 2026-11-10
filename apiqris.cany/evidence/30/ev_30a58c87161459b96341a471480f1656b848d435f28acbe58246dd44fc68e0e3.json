@@ -1,0 +1,48 @@
+{
+  "id": "ev_30a58c87161459b96341a471480f1656b848d435f28acbe58246dd44fc68e0e3",
+  "subject": {
+    "kind": "script",
+    "sha256": "4eb67bdb7290dcc6927af5e700793b2a00808375fe307ee4cd00fd03f8b8a13e",
+    "name": "app.js"
+  },
+  "operation": "core_target_triage",
+  "params": {
+    "path": null
+  },
+  "result": {
+    "description": "A script or web page",
+    "kind": "script",
+    "next_steps": [
+      {
+        "tool": "js_app_map",
+        "why": "parse the code, modules and endpoints"
+      }
+    ],
+    "plain_english": "app.js is a script or web page.",
+    "recommended_toolsets": [
+      "core",
+      "javascript"
+    ],
+    "size": 522079
+  },
+  "summary": "app.js is a script or web page.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "linux-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "detected_by_content",
+      "message": "the kind is detected from the first bytes and, to break ties, the file name"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [],
+  "links": []
+}

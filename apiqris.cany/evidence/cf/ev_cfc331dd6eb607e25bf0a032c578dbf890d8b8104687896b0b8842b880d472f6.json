@@ -1,0 +1,48 @@
+{
+  "id": "ev_cfc331dd6eb607e25bf0a032c578dbf890d8b8104687896b0b8842b880d472f6",
+  "subject": {
+    "kind": "script",
+    "sha256": "82c02ce053204193ee57766dd332eb3e005a28e6f2be46a30fd2f9f734e268d4",
+    "name": "app_daftar.html"
+  },
+  "operation": "core_target_triage",
+  "params": {
+    "path": null
+  },
+  "result": {
+    "description": "A script or web page",
+    "kind": "script",
+    "next_steps": [
+      {
+        "tool": "js_app_map",
+        "why": "parse the code, modules and endpoints"
+      }
+    ],
+    "plain_english": "app_daftar.html is a script or web page.",
+    "recommended_toolsets": [
+      "core",
+      "javascript"
+    ],
+    "size": 591
+  },
+  "summary": "app_daftar.html is a script or web page.",
+  "confidence": "inferred",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.0",
+    "host": "linux-x86_64"
+  },
+  "limitations": [
+    {
+      "code": "detected_by_content",
+      "message": "the kind is detected from the first bytes and, to break ties, the file name"
+    }
+  ],
+  "coverage": {
+    "status": "unknown"
+  },
+  "locations": [],
+  "links": []
+}
